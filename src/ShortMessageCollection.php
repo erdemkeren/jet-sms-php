@@ -23,7 +23,7 @@ class ShortMessageCollection
      */
     public function push(ShortMessage $shortMessage)
     {
-        if($shortMessage->hasManyReceivers()) {
+        if ($shortMessage->hasManyReceivers()) {
             throw new \LogicException(
                 "Expected one receiver per short message, got many."
             );
