@@ -136,11 +136,6 @@ Eğer katkıda bulunmak isterseniz lütfen [Katkıda Bulunun](KATKI.md) dosyası
 ## Tanıtımlar
 
 - [Hilmi Erdem KEREN](https://github.com/erdemkeren)
-- [Uğur Aydogdu](https://github.com/jnbn)
-
-Bu paket
-
-[epigra/tckimlik](https://github.com/epigra/tckimlik) paketinin üzerine geliştirilmiştir.
 
 ## Lisans
 
