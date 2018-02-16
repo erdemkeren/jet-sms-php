@@ -32,20 +32,60 @@ final class JetSmsService
     private $collectionFactory;
 
     /**
+     * The before callback which will be called before sending single messages.
+     *
+     * @var callable|null
+     */
+    private $beforeSingleShortMessageCallback;
+
+    /**
+     * The after callback which will be called before sending single messages.
+     *
+     * @var callable|null
+     */
+    private $afterSingleShortMessageCallback;
+
+    /**
+     * The before callback which will be called before sending multiple messages.
+     *
+     * @var callable|null
+     */
+    private $beforeMultipleShortMessageCallback;
+
+    /**
+     * The after callback which will be called after sending multiple messages.
+     *
+     * @var callable|null
+     */
+    private $afterMultipleShortMessageCallback;
+
+    /**
      * JetSmsService constructor.
      *
-     * @param  JetSmsClientInterface        $jetSmsClient
-     * @param  ShortMessageFactoryInterface $shortMessageFactory
+     * @param  JetSmsClientInterface                  $jetSmsClient
+     * @param  ShortMessageFactoryInterface           $shortMessageFactory
      * @param  ShortMessageCollectionFactoryInterface $shortMessageCollectionFactory
+     * @param  callable|null                          $beforeSingleShortMessageCallback
+     * @param  callable|null                          $afterSingleShortMessageCallback
+     * @param  callable|null                          $beforeMultipleShortMessageCallback
+     * @param  callable|null                          $afterMultipleShortMessageCallback
      */
     public function __construct(
         JetSmsClientInterface $jetSmsClient,
         ShortMessageFactoryInterface $shortMessageFactory,
-        ShortMessageCollectionFactoryInterface $shortMessageCollectionFactory
+        ShortMessageCollectionFactoryInterface $shortMessageCollectionFactory,
+        $beforeSingleShortMessageCallback = null,
+        $afterSingleShortMessageCallback = null,
+        $beforeMultipleShortMessageCallback = null,
+        $afterMultipleShortMessageCallback = null
     ) {
         $this->client = $jetSmsClient;
         $this->factory = $shortMessageFactory;
         $this->collectionFactory = $shortMessageCollectionFactory;
+        $this->beforeSingleShortMessageCallback = $beforeSingleShortMessageCallback;
+        $this->afterSingleShortMessageCallback = $afterSingleShortMessageCallback;
+        $this->beforeMultipleShortMessageCallback = $beforeMultipleShortMessageCallback;
+        $this->afterMultipleShortMessageCallback = $afterMultipleShortMessageCallback;
     }
 
     /**
@@ -60,7 +100,17 @@ final class JetSmsService
     {
         $shortMessage = $this->factory->create($receivers, $body);
 
-        return $this->client->sendShortMessage($shortMessage);
+        if(is_callable($this->beforeSingleShortMessageCallback)) {
+            ($this->beforeSingleShortMessageCallback)($shortMessage);
+        }
+
+        $response = $this->client->sendShortMessage($shortMessage);
+
+        if(is_callable($this->afterSingleShortMessageCallback)) {
+            ($this->afterSingleShortMessageCallback)($response, $shortMessage);
+        }
+
+        return $response;
     }
 
     /**
@@ -74,6 +124,10 @@ final class JetSmsService
     {
         $collection = $this->collectionFactory->create();
 
+        if(is_callable($this->beforeMultipleShortMessageCallback)) {
+            ($this->beforeMultipleShortMessageCallback)($collection);
+        }
+
         foreach ($messages as $message) {
             $collection->push($this->factory->create(
                 $message['recipient'],
@@ -81,6 +135,12 @@ final class JetSmsService
             ));
         }
 
-        return $this->client->sendShortMessages($collection);
+        $response = $this->client->sendShortMessages($collection);
+
+        if(is_callable($this->afterMultipleShortMessageCallback)) {
+            ($this->afterMultipleShortMessageCallback)($response, $collection);
+        }
+
+        return $response;
     }
 }

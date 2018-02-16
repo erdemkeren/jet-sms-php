@@ -15,6 +15,8 @@ use Erdemkeren\JetSms\Http\Responses\JetSmsResponseInterface;
 
 class JetSmsServiceTest extends PHPUnit_Framework_TestCase
 {
+    public static $functions;
+
     /**
      * @var JetSmsService
      */
@@ -59,6 +61,7 @@ class JetSmsServiceTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
+        self::$functions = M::mock();
         $this->shortMessage = M::mock(ShortMessage::class);
         $this->shortMessage2 = M::mock(ShortMessage::class);
         $this->response = M::mock(JetSmsResponseInterface::class);
@@ -144,5 +147,76 @@ class JetSmsServiceTest extends PHPUnit_Framework_TestCase
         ]);
 
         $this->assertInstanceOf(JetSmsResponseInterface::class, $response);
+    }
+
+    public function test_it_calls_the_before_and_after_callbacks()
+    {
+        $beforeSingleCallback = function ($message) {
+            JetSmsServiceTest::$functions->beforeSingle($message);
+        };
+
+        $afterSingleCallback = function ($response, $message) {
+            JetSmsServiceTest::$functions->afterSingle($response, $message);
+        };
+
+        $beforeMultipleCallback = function ($collection) {
+            JetSmsServiceTest::$functions->beforeMultiple($collection);
+        };
+
+        $afterMultipleCallback = function ($response, $collection) {
+            JetSmsServiceTest::$functions->afterMultiple($response, $collection);
+        };
+
+        $service = new JetSmsService(
+            $this->jetSmsClient,
+            $this->shortMessageFactory,
+            $this->shortMessageCollectionFactory,
+            $beforeSingleCallback,
+            $afterSingleCallback,
+            $beforeMultipleCallback,
+            $afterMultipleCallback
+        );
+        $this->shortMessageFactory->shouldReceive('create')
+            ->once()
+            ->with('recipient', 'message')
+            ->andReturn($this->shortMessage);
+
+        $this->jetSmsClient->shouldReceive('sendShortMessage')
+            ->once()
+            ->with($this->shortMessage)
+            ->andReturn($this->response);
+
+        JetSmsServiceTest::$functions->shouldReceive('beforeSingle')->with($this->shortMessage)->once();
+        JetSmsServiceTest::$functions->shouldReceive('afterSingle')->with($this->response, $this->shortMessage)->once();
+
+        $service->sendShortMessage('recipient', 'message');
+
+        JetSmsServiceTest::$functions->shouldReceive('beforeMultiple')->with($this->shortMessageCollection)->once();
+        JetSmsServiceTest::$functions->shouldReceive('afterMultiple')->with($this->response, $this->shortMessageCollection)->once();
+        $this->shortMessageFactory->shouldReceive('create')->twice()->andReturn(
+            $this->shortMessage,
+            $this->shortMessage2
+        );
+
+        $this->shortMessageCollectionFactory->shouldReceive('create')->once()->andReturn($this->shortMessageCollection);
+
+        $this->shortMessageCollection->shouldReceive('push')->once()->with($this->shortMessage);
+        $this->shortMessageCollection->shouldReceive('push')->once()->with($this->shortMessage2);
+
+        $this->jetSmsClient->shouldReceive('sendShortMessages')
+            ->once()
+            ->with($this->shortMessageCollection)
+            ->andReturn($this->response);
+
+        $service->sendShortMessages([
+            [
+                'recipient'     => 'recipient1',
+                'message'       => 'message1',
+            ],
+            [
+                'recipient'     => 'recipient2',
+                'message'       => 'message2',
+            ],
+        ]);
     }
 }
