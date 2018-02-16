@@ -1,0 +1,36 @@
+{
+    "name": "erdemkeren/jet-sms-php",
+    "description": "A PHP client library for jet-sms api",
+    "homepage": "https://github.com/laravel-notification-channels/jet-sms",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hilmi Erdem KEREN",
+            "email": "erdemkeren@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.4",
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "require-dev": {
+        "mockery/mockery": "^0.9.5",
+        "phpunit/phpunit": "4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Erdemkeren\\JetSms\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Erdemkeren\\JetSms\\Test\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
