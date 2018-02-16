@@ -54,7 +54,7 @@ class JetSmsXmlResponse implements JetSmsResponseInterface
         $response = explode(" ", $data);
         $this->statusCode = array_shift($response);
 
-        if(! $this->isSuccessful()) {
+        if (! $this->isSuccessful()) {
             $this->message = implode(' ', $response);
         } else {
             $this->groupId =  array_shift($response);

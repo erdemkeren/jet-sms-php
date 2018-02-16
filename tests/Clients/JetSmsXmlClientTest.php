@@ -11,15 +11,18 @@ use Psr\Http\Message\ResponseInterface;
 use Erdemkeren\JetSms\ShortMessageCollection;
 use Erdemkeren\JetSms\Http\Responses\JetSmsResponseInterface;
 
-function curl_init ($url = null) {
+function curl_init($url = null)
+{
     return JetSmsXmlClientTest::$functions->curl_init($url);
 }
 
-function curl_setopt ($ch, $option, $value) {
+function curl_setopt($ch, $option, $value)
+{
     return JetSmsXmlClientTest::$functions->curl_setopt($ch, $option, $value);
 }
 
-function curl_exec ($ch) {
+function curl_exec($ch)
+{
     return JetSmsXmlClientTest::$functions->curl_exec($ch);
 }
 

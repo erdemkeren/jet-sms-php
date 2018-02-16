@@ -49,7 +49,6 @@ class ShortMessageCollectionTest extends PHPUnit_Framework_TestCase
         try {
             $collection->push($this->shortMessage);
         } catch (\Exception $e) {
-
         }
 
         $this->assertInstanceOf(\LogicException::class, $e);
