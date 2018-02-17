@@ -27,7 +27,7 @@ final class JetSmsService
     /**
      * The short message collection factory implementation.
      *
-     * @var ShortMessageFactoryInterface
+     * @var ShortMessageCollectionFactoryInterface
      */
     private $collectionFactory;
 
