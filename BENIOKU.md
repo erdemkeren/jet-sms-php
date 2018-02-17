@@ -71,7 +71,7 @@ JetSmsService örneğini başarıyla çalıştırdıktan sonra; aşağıda bulun
 #### Tek Mesaj - Bir ya da Daha Çok Alıcı
 
 ```php
-$response = $service->sendShortMessage('Bu bir test mesajıdır.', ['5530000000', '5420000000']);
+$response = $service->sendShortMessage(['5530000000', '5420000000'], 'Bu bir test mesajıdır.');
 
 if($response->isSuccessful()) {
     // storeGroupIdForLaterReference fonksiyonu pakete dahil değildir.
@@ -89,11 +89,11 @@ Eğer bu yöntemi kullanıyorsanız, her mesajın yalnızca bir alıcısı olmal
 
 ```php
 $response2 = $service->sendShortMessages([[
-    'body' => 'This is a test.',
-    'mobile_number' => '5530000000',
+    'recipient' => '5530000000',
+    'message' => 'This is a test.',
 ], [
-    'body' => 'This is another test.',
-    'mobile_number' => '5420000000',
+    'recipient' => '5420000000',
+    'message' => 'This is another test.',
 ]]);
 
 if($response2->isSuccessful()) {

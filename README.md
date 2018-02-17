@@ -80,7 +80,7 @@ After successfully booting your JetSmsService instance up; use one of the follow
 #### One Message - Single or Multiple Recipients:
 
 ```php
-$response = $service->sendShortMessage('This is a test message.', ['5530000000', '5420000000']);
+$response = $service->sendShortMessage(['5530000000', '5420000000'], 'This is a test message.');
 
 if($response->isSuccessful()) {
     // storeGroupIdForLaterReference is not included in the package.
@@ -98,11 +98,11 @@ Please not that if you have using that method, every message should only have on
 
 ```php
 $response2 = $service->sendShortMessages([[
-    'body' => 'This is a test.',
-    'mobile_number' => '5530000000',
+    'recipient' => '5530000000',
+    'message' => 'This is a test.',
 ], [
-    'body' => 'This is another test.',
-    'mobile_number' => '5420000000',
+    'recipient' => '5420000000',
+    'message' => 'This is another test.',
 ]]);
 
 if($response2->isSuccessful()) {
