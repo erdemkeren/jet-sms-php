@@ -101,13 +101,13 @@ final class JetSmsService
         $shortMessage = $this->factory->create($receivers, $body);
 
         if(is_callable($this->beforeSingleShortMessageCallback)) {
-            ($this->beforeSingleShortMessageCallback)($shortMessage);
+            call_user_func_array($this->beforeSingleShortMessageCallback, [$shortMessage]);
         }
 
         $response = $this->client->sendShortMessage($shortMessage);
 
         if(is_callable($this->afterSingleShortMessageCallback)) {
-            ($this->afterSingleShortMessageCallback)($response, $shortMessage);
+            call_user_func_array($this->afterSingleShortMessageCallback, [$response, $shortMessage]);
         }
 
         return $response;
@@ -125,7 +125,7 @@ final class JetSmsService
         $collection = $this->collectionFactory->create();
 
         if(is_callable($this->beforeMultipleShortMessageCallback)) {
-            ($this->beforeMultipleShortMessageCallback)($collection);
+            call_user_func_array($this->beforeMultipleShortMessageCallback, [$collection]);
         }
 
         foreach ($messages as $message) {
@@ -138,7 +138,7 @@ final class JetSmsService
         $response = $this->client->sendShortMessages($collection);
 
         if(is_callable($this->afterMultipleShortMessageCallback)) {
-            ($this->afterMultipleShortMessageCallback)($response, $collection);
+            call_user_func_array($this->afterMultipleShortMessageCallback, [$response, $collection]);
         }
 
         return $response;
