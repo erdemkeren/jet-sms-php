@@ -176,6 +176,7 @@ class JetSmsServiceTest extends TestCase
             $beforeMultipleCallback,
             $afterMultipleCallback
         );
+
         $this->shortMessageFactory->shouldReceive('create')
             ->once()
             ->with('recipient', 'message')
@@ -189,7 +190,8 @@ class JetSmsServiceTest extends TestCase
         JetSmsServiceTest::$functions->shouldReceive('beforeSingle')->with($this->shortMessage)->once();
         JetSmsServiceTest::$functions->shouldReceive('afterSingle')->with($this->response, $this->shortMessage)->once();
 
-        $service->sendShortMessage('recipient', 'message');
+        $response = $service->sendShortMessage('recipient', 'message');
+        $this->assertInstanceOf(JetSmsResponseInterface::class, $response);
 
         JetSmsServiceTest::$functions->shouldReceive('beforeMultiple')->with($this->shortMessageCollection)->once();
         JetSmsServiceTest::$functions->shouldReceive('afterMultiple')->with($this->response, $this->shortMessageCollection)->once();
@@ -208,7 +210,7 @@ class JetSmsServiceTest extends TestCase
             ->with($this->shortMessageCollection)
             ->andReturn($this->response);
 
-        $service->sendShortMessages([
+        $response = $service->sendShortMessages([
             [
                 'recipient'     => 'recipient1',
                 'message'       => 'message1',
@@ -218,5 +220,7 @@ class JetSmsServiceTest extends TestCase
                 'message'       => 'message2',
             ],
         ]);
+
+        $this->assertInstanceOf(JetSmsResponseInterface::class, $response);
     }
 }
