@@ -91,23 +91,25 @@ final class JetSmsService
     /**
      * Send the given body to the given receivers.
      *
-     * @param  string       $body      The body of the short message.
-     * @param  array|string $receivers The receiver(s) of the message.
+     * @param  array|string|ShortMessage $receivers The receiver(s) of the message or the message object.
+     * @param  string|null               $body      The body of the message or null when using short message object.
      *
      * @return JetSmsResponseInterface The parsed JetSms response object.
      */
-    public function sendShortMessage($receivers, $body)
+    public function sendShortMessage($receivers, $body = null)
     {
-        $shortMessage = $this->factory->create($receivers, $body);
-
-        if (is_callable($this->beforeSingleShortMessageCallback)) {
-            call_user_func_array($this->beforeSingleShortMessageCallback, [$shortMessage]);
+        if( ! $receivers instanceof ShortMessage) {
+            $receivers = $this->factory->create($receivers, $body);
         }
 
-        $response = $this->client->sendShortMessage($shortMessage);
+        if (is_callable($this->beforeSingleShortMessageCallback)) {
+            call_user_func_array($this->beforeSingleShortMessageCallback, [$receivers]);
+        }
+
+        $response = $this->client->sendShortMessage($receivers);
 
         if (is_callable($this->afterSingleShortMessageCallback)) {
-            call_user_func_array($this->afterSingleShortMessageCallback, [$response, $shortMessage]);
+            call_user_func_array($this->afterSingleShortMessageCallback, [$response, $receivers]);
         }
 
         return $response;
@@ -116,29 +118,33 @@ final class JetSmsService
     /**
      * Send the given short messages.
      *
-     * @param  array $messages         An array containing short message arrays.
+     * @param  array|ShortMessageCollection $messages An array containing short message arrays or collection.
      *
      * @return JetSmsResponseInterface The parsed JetSms response object.
      */
-    public function sendShortMessages(array $messages)
+    public function sendShortMessages($messages)
     {
-        $collection = $this->collectionFactory->create();
+        if (! $messages instanceof ShortMessageCollection) {
+            $collection = $this->collectionFactory->create();
+
+            foreach ($messages as $message) {
+                $collection->push($this->factory->create(
+                    $message['recipient'],
+                    $message['message']
+                ));
+            }
+
+            $messages = $collection;
+        }
 
         if (is_callable($this->beforeMultipleShortMessageCallback)) {
-            call_user_func_array($this->beforeMultipleShortMessageCallback, [$collection]);
+            call_user_func_array($this->beforeMultipleShortMessageCallback, [$messages]);
         }
 
-        foreach ($messages as $message) {
-            $collection->push($this->factory->create(
-                $message['recipient'],
-                $message['message']
-            ));
-        }
-
-        $response = $this->client->sendShortMessages($collection);
+        $response = $this->client->sendShortMessages($messages);
 
         if (is_callable($this->afterMultipleShortMessageCallback)) {
-            call_user_func_array($this->afterMultipleShortMessageCallback, [$response, $collection]);
+            call_user_func_array($this->afterMultipleShortMessageCallback, [$response, $messages]);
         }
 
         return $response;
