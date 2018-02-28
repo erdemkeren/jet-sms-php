@@ -2,9 +2,10 @@
 
 namespace Erdemkeren\JetSms\Test;
 
+use PHPUnit\Framework\TestCase;
 use Erdemkeren\JetSms\Http\Responses\JetSmsXmlResponse;
 
-class JetSmsXmlResponseTest extends \PHPUnit_Framework_TestCase
+class JetSmsXmlResponseTest extends TestCase
 {
     public function test_it_returns_true_if_the_response_is_successful()
     {

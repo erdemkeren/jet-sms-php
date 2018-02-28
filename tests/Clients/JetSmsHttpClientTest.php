@@ -5,14 +5,14 @@ namespace Erdemkeren\JetSms\Test\Clients;
 use Mockery as M;
 use GuzzleHttp\Client;
 use Mockery\MockInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Erdemkeren\JetSms\ShortMessage;
 use Psr\Http\Message\ResponseInterface;
 use Erdemkeren\JetSms\ShortMessageCollection;
 use Erdemkeren\JetSms\Http\Clients\JetSmsHttpClient;
 use Erdemkeren\JetSms\Http\Responses\JetSmsResponseInterface;
 
-class JetSmsHttpClientTest extends PHPUnit_Framework_TestCase
+class JetSmsHttpClientTest extends TestCase
 {
     /**
      * @var Client|MockInterface

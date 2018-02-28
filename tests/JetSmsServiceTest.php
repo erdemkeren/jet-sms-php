@@ -4,7 +4,7 @@ namespace Erdemkeren\JetSms\Test;
 
 use Mockery as M;
 use Mockery\MockInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Erdemkeren\JetSms\ShortMessage;
 use Erdemkeren\JetSms\JetSmsService;
 use Erdemkeren\JetSms\ShortMessageFactory;
@@ -13,7 +13,7 @@ use Erdemkeren\JetSms\ShortMessageCollectionFactory;
 use Erdemkeren\JetSms\Http\Clients\JetSmsClientInterface;
 use Erdemkeren\JetSms\Http\Responses\JetSmsResponseInterface;
 
-class JetSmsServiceTest extends PHPUnit_Framework_TestCase
+class JetSmsServiceTest extends TestCase
 {
     public static $functions;
 

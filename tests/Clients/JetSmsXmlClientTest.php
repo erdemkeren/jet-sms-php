@@ -5,7 +5,7 @@ namespace Erdemkeren\JetSms\Http\Clients;
 use Mockery as M;
 use GuzzleHttp\Client;
 use Mockery\MockInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Erdemkeren\JetSms\ShortMessage;
 use Psr\Http\Message\ResponseInterface;
 use Erdemkeren\JetSms\ShortMessageCollection;
@@ -26,7 +26,7 @@ function curl_exec($ch)
     return JetSmsXmlClientTest::$functions->curl_exec($ch);
 }
 
-class JetSmsXmlClientTest extends PHPUnit_Framework_TestCase
+class JetSmsXmlClientTest extends TestCase
 {
     public static $functions;
 

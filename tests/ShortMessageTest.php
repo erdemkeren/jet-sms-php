@@ -3,10 +3,10 @@
 namespace Erdemkeren\JetSms\Test;
 
 use Mockery as M;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Erdemkeren\JetSms\ShortMessage;
 
-class ShortMessageTest extends PHPUnit_Framework_TestCase
+class ShortMessageTest extends TestCase
 {
     public function setUp()
     {
