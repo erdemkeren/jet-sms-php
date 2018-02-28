@@ -24,8 +24,8 @@ class ShortMessage
     /**
      * ShortMessage constructor.
      *
-     * @param string       $body
      * @param string|array $receivers
+     * @param string       $body
      */
     public function __construct($receivers, $body)
     {
@@ -68,7 +68,7 @@ class ShortMessage
     /**
      * Get the receivers of the short message as concatenated string.
      *
-     * @param  null $glue
+     * @param  string|null $glue
      * @return string
      */
     public function receiversString($glue = null)
