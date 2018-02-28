@@ -98,7 +98,7 @@ final class JetSmsService
      */
     public function sendShortMessage($receivers, $body = null)
     {
-        if( ! $receivers instanceof ShortMessage) {
+        if (! $receivers instanceof ShortMessage) {
             $receivers = $this->factory->create($receivers, $body);
         }
 
