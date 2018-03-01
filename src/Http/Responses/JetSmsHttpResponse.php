@@ -5,7 +5,7 @@ namespace Erdemkeren\JetSms\Http\Responses;
 use BadMethodCallException;
 
 /**
- * Class JetSMSHttpApiResponse.
+ * Class JetSmsHttpResponse.
  */
 final class JetSmsHttpResponse implements JetSmsResponseInterface
 {
